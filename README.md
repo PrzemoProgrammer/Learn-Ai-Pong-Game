@@ -3,4 +3,5 @@
 # Learn Ai Pong Game - Educational ai pong game
 * Learn 𝗛𝗧𝗠𝗟𝟱 by creating a pong game playing against a bot
 
-<img align="right" alt="coding" src="https://www.tutorialrepublic.com/lib/images/html-illustration.png" width="350" height="auto">
+
+<img align="right" alt="coding" src="https://www.tutorialrepublic.com/lib/images/html-illustration.png" width="450" height="auto">
