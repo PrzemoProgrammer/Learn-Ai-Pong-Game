@@ -1,0 +1,287 @@
+<!-- 
+
+Hello, 
+In this project you will learn how to create a Pong game against bot AI (artificial intelligence).
+
+At start, we need to make small introduce and familiarize ourselves with the logic operators necessary to use in the project:
+
+    LOGIC OPERATORS:
+    && - its means "and"
+    || - its means "or"
+
+
+Below is the XY axis which mathematically shows the location of our game.
+
+        (0,0)XY
+        +---------------------------------- X 10
+        |                 *(0,5)XY
+        |    
+        |    
+        |             
+        |*(-5,0)XY
+        |    
+        |              *(4,-7)XY
+        |    
+        Y 
+        - 10
+
+Point (0,0) is the starting point of our game, which means that it is the upper left corner of our playing field.
+
+So our game on the XY axis looks something like this:
+
+        (0,0)XY
+        +---------------------------------- X 10
+        |                 
+        |     ---------------------------------
+        |     |                               |
+        |     |                               |
+        |     |  |              o          |  |
+        |     |  |                         |  |
+        |     |                               |
+        |     |                               |
+        |     ---------------------------------
+        Y 
+        - 10
+
+Understanding the XY axis is very important to effectively manage the arrangement and movement of elements in the game. 
+When reviewing the game's code, if you come across code that changes the X and Y position of a player, bot or ball, come back here to better understand the movement.
+
+______________________________________________________________________________________________________________________________________________________________________________________
+First, we need to create HTML5 file and give a structure to our project.
+This is the basic structure with which an HTML project always starts. An entire HTML document consists of two main parts: the header:<head><head> and the body:<body></body>. 
+Below is an example of a full HTML document:
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Project title</title>
+  </head>
+  <body>
+  </body>
+</html>
+
+
+
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@          OUR PROJECT IS STARING HERE         @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+
+<!DOCTYPE html> <!-- (This is the HTML document type declaration that tells the browser that this is an HTML5 document) -->
+
+
+<html lang="en"> <!-- (This is the opening of the <html> tag, which marks the beginning of the entire HTML document. 
+                        The lang="en" attribute indicates that the language used in the document is English (the abbreviation "en" is the ISO 639-1 standard language code for English)) -->
+
+
+
+<head> <!-- (The meta tag is used to define a page's metadata, such as the page title, meta tags, links to CSS stylesheets, 
+             and other information that is not directly visible on the website but is important for its functioning and indexing by web browsers) -->
+
+
+
+    <meta charset="UTF-8">  <!-- (This metatag defines the character set to be used on the page. In this case, the character set is "UTF-8", 
+                                  which means that the page will use the Unicode character encoding standard. 
+                                  This is the recommended character set for most websites because it supports many different characters and alphabets) -->
+
+
+
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- (This meta tag is mainly used to control the behavior of web browsers, especially Internet Explorer.
+                                                                An http-equiv attribute set to "X-UA-Compatible" tells the browser to behave in a specific mode, 
+                                                                and a value of "IE=edge" tells it to be the latest available version of Internet Explorer.
+                                                                This helps avoid compatibility issues and ensures that the site will operate to the latest standards) -->
+
+
+
+
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- (This meta tag is used to adjust the display of the page on mobile devices.
+                                                                                  Specifies that the view width should be equal to the device width (width=device-width) and 
+                                                                                  that the initial page scale should be 1.0 (initial-scale=1.0).
+                                                                                  Thanks to this, the website will have the appropriate scale and will be displayed correctly on various devices, 
+                                                                                  such as smartphones and tablets) -->
+
+
+
+
+
+    <title>Ai Pong Game</title> <!-- (Add project title. Website name. Look at the project open in your browser. The name appears at the very top of the card. 
+                                      The name of our project is: "Ai Pong Game") -->
+
+
+                                  
+    <style> /* This tag is used to define CSS (Cascading Style Sheets) styles that control the appearance and formatting of elements on a web page. In HTML code, the <style> tag is typically placed in the <head> section of an HTML document and is used to specify style rules that will be applied to various elements on the page. */
+ 
+
+        body {  /* Body is a CSS selector that refers to the <body> element in the HTML document. All styling rules inside braces {} will apply to this element. */
+            margin: 0; /* Set the margin and of the <body> element to zero. Margins are spaces around an element that affect its position and appearance.*/
+            padding: 0; /* Set the padding of the <body> element to zero. Padding are spaces around an element that affect its position and appearance.*/
+            display: flex; /* Sets the way an element is displayed on the flexbox, which allows you to easily manage the layout of elements on the page. */
+            align-items: center; /* Uses flexbox properties to center content vertically within the <body> element. This means that all elements placed inside the <body> will be centered on the page. */
+            justify-content: center; /* Uses flexbox properties to center content horizontally within the <body> element. This means that all elements placed inside the <body> will be centered on the page. */
+            height: 100vh; /* Sets the height of the <body> element to 100 viewport units (viewport height, vh). This means that the <body> element will occupy the entire available height of the browser view. */
+            background-color: rgb(61, 47, 47); /* Sets the background color of the <body> element to dark gray. */
+        }
+     
+        canvas { /* Canvas is a CSS selector that refers to the <canvas> element in an HTML document. Styling rules inside braces {} will only apply to this element. */
+            border: 3px solid #fff /* Sets the border of the <canvas element. The border is 3 pixels thick, is a solid line (that is, a solid line), and is white */
+        }
+
+
+    </style> <!-- Tag close -->
+</head> <!-- Tag close -->
+
+
+<body> <!-- This is the opening tag in HTML that begins the content section of a web page. All elements visible to the user, such as text, images, links, and more, are usually placed inside this tag. 
+             This is where the main content of the page is defined.  -->
+    <canvas id="gameCanvas" width="800" height="400"></canvas>  <!-- This is an HTML tag used to define an area on which graphics, animations, or images can be drawn using JavaScript. 
+                                                                      It is empty space that can be customized and rendered using scripts. -->
+
+
+    <script>
+        const canvas = document.getElementById("gameCanvas"); //Gets the canvas element with id "gameCanvas" from the HTML document and assigns it to the canvas variable.
+        const context = canvas.getContext("2d"); //Gets the 2D rendering context for the canvas element and assigns it to the context variable that will be used to draw on the canvas.
+
+        const paddleWidth = 10; //Specifies the width of the palette.
+        const paddleHeight = 100; //Specifies the height of the palette.
+        const ballSize = 10; //Determines the size of the ball.
+
+        let playerY = canvas.height / 2 - paddleHeight / 2; //Initializes the position of the player paddle in the middle of the canvas height.
+        let aiY = canvas.height / 2 - paddleHeight / 2; //Initializes the position of the ai palette in the middle of the canvas height.
+        let playerSpeedY = 0; //Initializes the speed of movement of the player's paddle in the Y axis.
+        let aiSpeedY = 0; //Initializes the speed of movement of the ai paddle in the Y axis.
+        let ballX = canvas.width / 2; //Initializes the position of the ball at the center of the canvas width.
+        let ballY = canvas.height / 2; //Initializes the position of the ball at the center of the canvas height.
+        let ballSpeedX = 5; //Initializes the speed of the ball in the X axis.
+        let ballSpeedY = 5; //Initializes the speed of the ball in the Y axis.
+        let playerScore = 0; //Initializes the player's score to 0.
+        let aiScore = 0; //Initializes the ai's score to 0.
+
+        function draw() { //Begins the definition of the draw function, which is responsible for drawing the game and handling the logic.
+            context.fillStyle = "#888"; //Sets the fill color to light gray.
+            context.fillRect(0, 0, canvas.width, canvas.height); //Draws a rectangle that fills the entire canvas, creating the game background.
+
+            context.fillStyle = "#00F"; //Sets the fill color to blue for the player's paddle.
+            context.fillRect(10, playerY, paddleWidth, paddleHeight); //Draws the player's paddle in the shape of a rectangle.
+
+            context.fillStyle = "#0F0"; //Sets the fill color to green for the ai palette.
+            context.fillRect(canvas.width - 10 - paddleWidth, aiY, paddleWidth, paddleHeight); //Draws the ai's palette in the shape of a rectangle.
+
+            context.fillStyle = "#FFF"; //Sets the fill color to white for the ball.
+            context.beginPath(); //Starts drawing a new path.
+            context.arc(ballX, ballY, ballSize, 0, Math.PI * 2); //Draws a round ball.
+            context.fill(); //Fills the ball with white color.
+
+
+            //This Conditional statement that stops the Y position of the player's paddle so that it does not go beyond the top side playing field (i.e. beyond the canvas).
+            if (playerY < 0) {//Conditional statement. If the player's Y position is less than 0, set the player's Y position to 0. This is needed to prevent the player's paddle from escaping the game area.
+                playerY = 0; //Set the player's Y position to 0. 
+            }
+
+            //This Conditional statement that stops the Y position of the player's paddle so that it does not go beyond the the bot side playing field (i.e. beyond the canvas).
+            if (playerY > canvas.height - paddleHeight) {//Conditional statement. If the Y position of the player is greater than the height of the canvas and the height of the paddle, it sets it to this value. 
+                                                         //This is needed to prevent the player's paddle from escaping the game area.
+                playerY = canvas.height - paddleHeight; //Set the player's Y position to calculation value canvas height minus paddle height.
+            }
+
+            aiY += aiSpeedY; //Update the position of Y ai. aiSpeedY varies with ball flight position.
+
+
+             //This Conditional statement that stops the Y position of the ai's paddle so that it does not go beyond the top side playing field (i.e. beyond the canvas).
+            if (aiY < 0) { //Conditional statement. If the ai's Y position is less than 0, set the ai's Y position to 0. This is needed to prevent the ai's paddle from escaping the game area.
+                aiY = 0;//Set the ai's Y position to 0. 
+            }
+
+             //This Conditional statement that stops the Y position of the ai's paddle so that it does not go beyond the the bot side playing field (i.e. beyond the canvas).
+            if (aiY > canvas.height - paddleHeight) {//Conditional statement. If the Y position of the ai is greater than the height of the canvas and the height of the paddle, it sets it to this value. 
+                                                     //This is needed to prevent the ai's paddle from escaping the game area.
+                aiY = canvas.height - paddleHeight; //Set the ai's Y position to calculation value canvas height minus paddle height.
+            }
+
+            ballX += ballSpeedX; //The X value of the ball is updated by adding the value of the ballSPeedX variable. This is needed to keep the ball moving in X position.
+            ballY += ballSpeedY; //he Y value of the ball is updated by adding the value of the ballSPeedY variable. This is needed to keep the ball moving i Y position.
+
+            //This Conditional statement bounces the ball off the player's paddle.
+            if (ballX <= 10 + paddleWidth && ballY >= playerY && ballY <= playerY + paddleHeight) {//Conditional statement. If the X position of the ball is less than 10 ( 10 is offset for better precision) plus paddle width, 
+                                                                                                   //and (&& this symbol mean "and") Y position of the ball is greater than or equal to Player Y position, 
+                                                                                                   //and ball Y position is less than player Y position plus paddle height. 
+
+                ballSpeedX = -ballSpeedX; //Changing the X position of the ball. We change the sign of the ballSpeedX variable operator to the opposite so that the ball can move in the opposite direction, 
+                                          //which gives the effect of the ball bouncing.
+            }
+
+            //This Conditional statement bounces the ball off the ai's paddle.
+            if (ballX >= canvas.width - 10 - paddleWidth && ballY >= aiY && ballY <= aiY + paddleHeight) {//Conditional statement. If the X position of the ball is greater or equal than canvas width (The width of the canvas is marked by a white rectangular line), minus 10 ( 10 is offset for better precision) plus paddle width, minus paddle width,
+                                                                                                          //and (&& this symbol mean "and") Y position of the ball is greater than or equal to Ai Y position, 
+                                                                                                          //and ball Y position is less  or equal than Ai Y position plus paddle height. 
+
+                ballSpeedX = -ballSpeedX;//Changing the X position of the ball. We change the sign of the ballSpeedX variable operator to the opposite so that the ball can move in the opposite direction, 
+                                          //which gives the effect of the ball bouncing.
+            }
+
+            //This Conditional statement that bounces the ball off the top and bottom edges of the canvas, that is, our playing field.
+            if (ballY <= 0 || ballY >= canvas.height) { //Conditional statement. If the Y position of the ball is less or equal 0 (0 because if it was a negative number, the ball would fly out of the field of play), 
+                                                        // or (|| this symbol mean "or") Y position of the ball is greater than or canvas height (canvas height because the ball would fly out of the field of play).  
+
+                ballSpeedY = -ballSpeedY;//Changing the Y position of the ball. We change the sign of the ballSpeedY variable operator to the opposite so that the ball can move in the opposite direction, 
+                                          //which gives the effect of the ball bouncing.
+            }
+
+            //This Conditional statement that adds ai points if the ball flies into the player's field.
+            if (ballX < 0) { //Conditional statement. If the ball's X position is less than 0, then let what is given in the braces happen {}.
+                aiScore++; // Add ai points. This is a shortened notation of the formula, aiScore = aiScore + 1 , which means increase ai points by 1 point.
+                resetBall(); //A function is called to reset the ball's position.
+            } else if (ballX > canvas.width) { //Conditional statement. If the X position of the ball is greater than the width of the canvas, it is greater than the width of the game, then let what is given in the braces happen {}.
+                playerScore++;// Add player points. This is a shortened notation of the formula, playerScore = playerScore + 1 , which means increase ai points by 1 point.
+                resetBall(); //A function is called to reset the ball's position.
+            }
+          
+            updateAiYPosition()//Calling a function updateAiYPosition, which means updating the position of the AI paddle depending on the position of the ball.
+
+            context.font = "40px Arial"; //We assign the font size like 40px and font type like Arial to the displayed points.
+            context.fillStyle = "#000"; //We give the font a black color.
+            context.fillText(playerScore, 350, 40); //We display player points in X:350px and Y:40px.
+            context.fillText(aiScore, canvas.width - 350, 40); //We display ai points in X:canvas.width-350px and Y:40px.
+
+            requestAnimationFrame(draw); //Function in JavaScript is used to harmonize animations across browsers. 
+                                         //In short, it enables smooth and efficient creation of animations in web browsers by executing the function passed as an argument at the earliest available opportunity before the next screen refresh, i.e. before the next animation "frame". 
+                                         //We pass the function we want to execute on the next frame of the animation. 
+                                         //In our case, it is a function called draw.The browser tries to time the call to this function to match the screen refresh, which means it fires perfectly before the next drawing on the screen. As a result, the animation is smooth and effective.
+        }//Ends the definition of the resetBall function.
+
+
+
+        //###############################################################    Here are the declared functions    ############################################################### 
+
+        function updateAiYPosition(){ //Begins the definition of the updateAiYPosition function, which Control the movement of the bot depending on the position of the ball.
+            if (ballY > aiY + paddleHeight / 2) { //Conditional statement. If the ball's Y position is greater than middle of the height of the paddle, then let what is given in the braces happen {}.
+                aiSpeedY = 5; //Set the value of the aiSpeedY variable to 5, which means that the ai pallet position moving up. 
+            } else {//If the above condition is not met, then the following one is performed.
+                aiSpeedY = -5; //Set the value of the aiSpeedY variable to -5, which means that the ai pallet position moving down. 
+            }
+        }//Ends the definition of the resetBall function.
+
+        function resetBall() { //Begins the definition of the resetBall function, which resets the ball's position and speed.
+            ballX = canvas.width / 2; //Sets the position of the ball in the middle of the canvas width.
+            ballY = canvas.height / 2; //Sets the position of the ball in the middle of the canvas height.
+            ballSpeedX = 5; //Resets the ball speed in the X axis.
+            ballSpeedY = 5; //Resets the ball speed in the Y axis.
+        } //Ends the definition of the resetBall function.
+
+        function resetGame() { //Begins the definition of the resetGame function, which resets the player's or ai's score and calls the resetBall function.
+            playerScore = 0; //Resets the player's score.
+            aiScore = 0; //Resets the ai's score.
+            resetBall(); //Calls the resetBall function to reset the ball position.
+        } //Ends the definition of the resetGame function. 
+
+        canvas.addEventListener("mousemove", (event) => { //Adds a listener for the "mousemove" event on the canvas element.
+            const mouseY = event.clientY - canvas.getBoundingClientRect().top; //Calculates the position of the mouse relative to the top edge of the canvas. 
+                                                                                //canvas.getBoundingClientRect().top This gets the space from the top of the start of the browser window to the canvas. 
+                                                                                //This is needed to calculate the mouse position on the canvas.
+
+            playerY = mouseY - paddleHeight / 2; //Updates the position of the player paddle based on the mouse position.
+        }); //Ends the definition of the "mousemove" event handler.
+
+        draw(); //Calls the draw function at the end of the script, starting the game.
+    </script>  <!-- Tag close -->
+</body>  <!-- Tag close -->
+</html>  <!-- Tag close -->
